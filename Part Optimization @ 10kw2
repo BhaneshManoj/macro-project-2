@@ -1,0 +1,59 @@
+import numpy as np
+from scipy.optimize import minimize
+
+
+# Utility function: U(c1, c2) = ln(c1) + β * ln(c2)
+def utility(c, beta):
+    c1, c2 = c
+    return -(np.log(c1) + beta * np.log(c2))  # Negative for minimization
+
+
+# Updated constraint function: c2 = (w1 - c1)(1 + r) + w2
+def constraint(c, w1, r, w2):
+    c1, c2 = c
+    return (w1 - c1) * (1 + r) + w2 - c2  # Set the equation equal to 0
+
+
+# Optimization function
+def optimal_consumption(w1, beta, r, w2):
+    # Adjust the initial guess to be more reasonable
+    # We start at a value where consumption in both periods are roughly balanced
+    initial_guess = [w1 / 2, (w1 / 2) * (1 + r) + w2 / 2]
+
+    # Define the constraint dictionary
+    cons = ({'type': 'eq', 'fun': constraint, 'args': (w1, r, w2)})
+
+    # Bounds for c1 and c2 (both must be positive)
+    bounds = [(0, w1), (0, w1 * (1 + r) + w2)]
+
+    # Minimize the negative utility using the 'trust-constr' method (more robust)
+    result = minimize(utility, initial_guess, args=(beta,), constraints=cons, bounds=bounds,
+                      method='trust-constr', options={'gtol': 1e-5})  # Relaxed tolerance
+
+    # Check if optimization was successful
+    if result.success:
+        # Extract optimal consumption values
+        c1_optimal, c2_optimal = result.x
+        return c1_optimal, c2_optimal  # Correctly inside the function
+    else:
+        # Print the error message if optimization fails
+        print("Optimization failed to converge!")
+        print(f"Message: {result.message}")
+        print(f"Status: {result.status}")
+        print(f"Fun value (objective function value): {result.fun}")
+        return None, None  # Return None to indicate failure
+
+
+# Example usage
+w1 = 100  # Initial wealth
+w2 = 10000  # Large wealth for second period
+beta = 0.95  # Discount factor
+r = 0.05  # Interest rate
+
+c1, c2 = optimal_consumption(w1, beta, r, w2)
+
+if c1 is not None and c2 is not None:
+    print(f"Optimal consumption in period 1: {c1:.2f}")
+    print(f"Optimal consumption in period 2: {c2:.2f}")
+else:
+    print("Optimization did not succeed.")
