@@ -26,7 +26,7 @@ The project connects theoretical models to real-world data, particularly focusin
 - **`[india_growth_processed.csv]`**: This file has the solow residual calculated to use for Part 2 and 3.
 
 ### 📄 Supplementary Files
-- **Part 4 Text Files**: Contain problem setup and numerical solutions for the intertemporal optimization problem.
+- **Part 4 Text Files**: Contain problem setup and numerical solutions for the intertemporal optimization problem using python code.
 - **`FOC_calc.pdf`**: Contains manual calculations for Part 4 and detailed project guidelines.
 
 ---
