@@ -39,7 +39,7 @@ def optimal_consumption(w1, beta, r):
 
 # Example usage
 w1 = 100  # Initial wealth
-beta = 0.5  # Discount factor
+beta = 0.95  # Discount factor
 r = 0.05  # Interest rate
 
 try:
