@@ -8,10 +8,10 @@ def utility(c, beta):
     return -(np.log(c1) + beta * np.log(c2))  # Negative for minimization
 
 
-# Constraint function: c2 = (w1 - c1)(1 + r)
-def constraint(c, w1, r):
+# Updated constraint function: c1 + c2 = w1
+def constraint(c, w1):
     c1, c2 = c
-    return (w1 - c1) * (1 + r) - c2
+    return c1 + c2 - w1  # Ensure the sum of c1 and c2 equals w1
 
 
 # Optimization function
@@ -20,10 +20,10 @@ def optimal_consumption(w1, beta, r):
     initial_guess = [w1 / 2, w1 / 2]  # Reasonable initial guess
 
     # Define the constraint dictionary
-    cons = ({'type': 'eq', 'fun': constraint, 'args': (w1, r)})
+    cons = ({'type': 'eq', 'fun': constraint, 'args': (w1,)})
 
     # Bounds for c1 and c2 (both must be positive)
-    bounds = [(0, w1), (0, w1 * (1 + r))]
+    bounds = [(0, w1), (0, w1)]
 
     # Minimize the negative utility (since we want to maximize utility)
     result = minimize(utility, initial_guess, args=(beta,), constraints=cons, bounds=bounds)
@@ -39,8 +39,8 @@ def optimal_consumption(w1, beta, r):
 
 # Example usage
 w1 = 100  # Initial wealth
-beta = 0.95  # Discount factor
-r = 0.05  # Interest rate
+beta = 0.9  # Discount factor
+r = 0.05  # Interest rate (not needed in the constraint anymore)
 
 try:
     # Call the optimal_consumption function and print results
@@ -49,4 +49,3 @@ try:
     print(f"Optimal consumption in period 2: {c2:.2f}")
 except ValueError as e:
     print(e)
-
