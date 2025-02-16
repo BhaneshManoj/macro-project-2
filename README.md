@@ -27,7 +27,7 @@ The project connects theoretical models to real-world data, particularly focusin
 
 ### 📄 Supplementary Files
 - **Part 4 Text Files**: Contain problem setup and numerical solutions for the intertemporal optimization problem.
-- **`Project 2 - Model Simulation.pdf`**: Contains manual calculations for Part 4 and detailed project guidelines.
+- **`FOC_calculation.pdf`**: Contains manual calculations for Part 4 and detailed project guidelines.
 
 ---
 
