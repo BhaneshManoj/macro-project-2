@@ -1,0 +1,52 @@
+import numpy as np
+from scipy.optimize import minimize
+
+
+# Utility function: U(c1, c2) = ln(c1) + β * ln(c2)
+def utility(c, beta):
+    c1, c2 = c
+    return -(np.log(c1) + beta * np.log(c2))  # Negative for minimization
+
+
+# Constraint function: c2 = (w1 - c1)(1 + r)
+def constraint(c, w1, r):
+    c1, c2 = c
+    return (w1 - c1) * (1 + r) - c2
+
+
+# Optimization function
+def optimal_consumption(w1, beta, r):
+    # Initial guess for c1 and c2
+    initial_guess = [w1 / 2, w1 / 2]  # Reasonable initial guess
+
+    # Define the constraint dictionary
+    cons = ({'type': 'eq', 'fun': constraint, 'args': (w1, r)})
+
+    # Bounds for c1 and c2 (both must be positive)
+    bounds = [(0, w1), (0, w1 * (1 + r))]
+
+    # Minimize the negative utility (since we want to maximize utility)
+    result = minimize(utility, initial_guess, args=(beta,), constraints=cons, bounds=bounds)
+
+    # Ensure return is within the function
+    if result.success:
+        # Extract optimal consumption values
+        c1_optimal, c2_optimal = result.x
+        return c1_optimal, c2_optimal  # Correctly inside the function
+    else:
+        raise ValueError("Optimization failed to converge: " + result.message)
+
+
+# Example usage
+w1 = 100  # Initial wealth
+beta = 0.5  # Discount factor
+r = 0.05  # Interest rate
+
+try:
+    # Call the optimal_consumption function and print results
+    c1, c2 = optimal_consumption(w1, beta, r)
+    print(f"Optimal consumption in period 1: {c1:.2f}")
+    print(f"Optimal consumption in period 2: {c2:.2f}")
+except ValueError as e:
+    print(e)
+
