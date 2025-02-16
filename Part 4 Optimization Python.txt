@@ -8,11 +8,10 @@ def utility(c, beta):
     return -(np.log(c1) + beta * np.log(c2))  # Negative for minimization
 
 
-# Updated constraint function: c1 + c2 = w1
+# Updated constraint function: w1 = c1 + c2 / (1 + r)
 def constraint(c, w1):
     c1, c2 = c
-    return c1 + c2 - w1  # Ensure the sum of c1 and c2 equals w1
-
+    return w1 - c1 - c2 / (1 + r)
 
 # Optimization function
 def optimal_consumption(w1, beta, r):
