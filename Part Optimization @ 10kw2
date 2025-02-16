@@ -16,8 +16,7 @@ def constraint(c, w1, r, w2):
 
 # Optimization function
 def optimal_consumption(w1, beta, r, w2):
-    # Adjust the initial guess to be more reasonable
-    # We start at a value where consumption in both periods are roughly balanced
+    # Adjust the initial guess to start at a value where consumption in both periods are roughly balanced
     initial_guess = [w1 / 2, (w1 / 2) * (1 + r) + w2 / 2]
 
     # Define the constraint dictionary
@@ -26,7 +25,7 @@ def optimal_consumption(w1, beta, r, w2):
     # Bounds for c1 and c2 (both must be positive)
     bounds = [(0, w1), (0, w1 * (1 + r) + w2)]
 
-    # Minimize the negative utility using the 'trust-constr' method (more robust)
+    # Minimize the negative utility using the 'trust-constr' method
     result = minimize(utility, initial_guess, args=(beta,), constraints=cons, bounds=bounds,
                       method='trust-constr', options={'gtol': 1e-5})  # Relaxed tolerance
 
